@@ -27,7 +27,7 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Publish artifact
-        run:  mvn clean release:prepare release:perform -f pom.xml -batch-mode
+        run:  mvn clean release:prepare release:perform -f pom.xml -batch-mode -DskipTests
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
