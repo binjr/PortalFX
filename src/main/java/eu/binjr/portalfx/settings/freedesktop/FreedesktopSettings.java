@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.binjr.portal.settings.freedesktop;
+package eu.binjr.portalfx.settings.freedesktop;
 
 import java.util.Arrays;
 
@@ -24,7 +24,7 @@ import java.util.Arrays;
  * https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Settings.html#description
  *
  */
-public enum FreedesktopPortalSettings {
+public enum FreedesktopSettings {
     COLOR_SCHEME("color-scheme"),
     CONTRAST("contrast"),
     REDUCED_MOTION("reduced-motion"),
@@ -33,7 +33,7 @@ public enum FreedesktopPortalSettings {
 
     private final String name;
 
-    FreedesktopPortalSettings(String name) {
+    FreedesktopSettings(String name) {
         this.name = name;
     }
 
@@ -46,8 +46,8 @@ public enum FreedesktopPortalSettings {
         return name;
     }
 
-    public static FreedesktopPortalSettings fromName(String name) {
-        return Arrays.stream(FreedesktopPortalSettings.values())
+    public static FreedesktopSettings fromName(String name) {
+        return Arrays.stream(FreedesktopSettings.values())
                 .filter(e -> e.getName().equals(name))
                 .findAny()
                 .orElse(UNKNOWN);

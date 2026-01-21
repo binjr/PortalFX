@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package eu.binjr.portal.settings.javafx;
+package eu.binjr.portalfx.settings.javafx;
 
-import eu.binjr.portal.settings.DesktopSettings;
+import eu.binjr.portalfx.settings.DesktopSettings;
 import javafx.application.ColorScheme;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;

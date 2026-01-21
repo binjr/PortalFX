@@ -1,11 +1,12 @@
-package eu.binjr.portal;
+package eu.binjr.portalfx;
 
-import javafx.application.ColorScheme;
 import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -29,22 +30,22 @@ public class SettingsTests {
 
     @Test
     void coloScheme() throws Exception {
-        assertNotNull(runOnFxThread((() -> DesktopPortal.getSettings().colorSchemeProperty())));
+        assertNotNull(runOnFxThread((() -> Portal.getSettings().colorSchemeProperty())));
     }
 
     @Test
     void accentColor() throws Exception {
-        assertNotNull(runOnFxThread((() -> DesktopPortal.getSettings().accentColorProperty())));
+        assertNotNull(runOnFxThread((() -> Portal.getSettings().accentColorProperty())));
     }
 
     @Test
     void highContrast() throws Exception {
-        assertNotNull(runOnFxThread((() -> DesktopPortal.getSettings().highContrastProperty())));
+        assertNotNull(runOnFxThread((() -> Portal.getSettings().highContrastProperty())));
     }
 
     @Test
     void reduceMotion() throws Exception {
-        assertNotNull(runOnFxThread((() -> DesktopPortal.getSettings().reducedMotionProperty())));
+        assertNotNull(runOnFxThread((() -> Portal.getSettings().reducedMotionProperty())));
     }
 
     <T> T runOnFxThread(Supplier<T> supplier) throws InterruptedException, TimeoutException {
@@ -59,5 +60,14 @@ public class SettingsTests {
         } else {
             throw new TimeoutException("Timeout while running supplier");
         }
+    }
+
+    @Test
+    void xattrTest() throws IOException {
+
+        System.out.println(Portal.toHostFsPath(Path.of("/run/user/1000/doc/82ea9a9a/_g1gc.bjr")));
+        System.out.println(Portal.toHostFsPath(Path.of("/home/Fred/Documents/_g1gc.bjr")));
+        System.out.println(Portal.toHostFsPath(Path.of("foobar")));
+
     }
 }

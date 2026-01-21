@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package eu.binjr.portal.settings.freedesktop;
+package eu.binjr.portalfx.settings.freedesktop;
 
-import eu.binjr.portal.settings.DesktopSettings;
+import eu.binjr.portalfx.settings.DesktopSettings;
 import javafx.application.ColorScheme;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -42,9 +42,9 @@ import java.util.function.BiConsumer;
  * It automatically falls back to the default JavaFX implementation if the interface is not
  * available at runtime.
  */
-public class FreedesktopPortalSettingsProvider implements DesktopSettings, AutoCloseable {
+public class FreedesktopSettingsProvider implements DesktopSettings, AutoCloseable {
 
-    private static final Logger logger = LoggerFactory.getLogger(FreedesktopPortalSettingsProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(FreedesktopSettingsProvider.class);
     private static final ColorScheme DEFAULT_COLOR_SCHEME = ColorScheme.LIGHT;
     private static final Color DEFAULT_ACCENT_COLOR = Color.SLATEBLUE;
 
@@ -59,16 +59,16 @@ public class FreedesktopPortalSettingsProvider implements DesktopSettings, AutoC
 
     private DBusConnection sessionConnection;
 
-    public FreedesktopPortalSettingsProvider() {
+    public FreedesktopSettingsProvider() {
         var colorSchemeWrapper = new ReadOnlyObjectWrapper<>(DEFAULT_COLOR_SCHEME);
         var accentColorWrapper = new ReadOnlyObjectWrapper<>(DEFAULT_ACCENT_COLOR);
         var highContrastWrapper = new ReadOnlyBooleanWrapper(false);
         var reducedMotionWrapper = new ReadOnlyBooleanWrapper(false);
-        var foundSettings = EnumSet.noneOf(FreedesktopPortalSettings.class);
+        var foundSettings = EnumSet.noneOf(FreedesktopSettings.class);
 
         // Define mappings between DBus interface and JavaFX properties
         BiConsumer<String, Variant<?>> settingsMapper = (name, setting) -> {
-            switch (FreedesktopPortalSettings.fromName(name)) {
+            switch (FreedesktopSettings.fromName(name)) {
                 case COLOR_SCHEME -> {
                     if (setting.getValue() instanceof UInt32 colorScheme) {
                         colorSchemeWrapper.set(switch (colorScheme.intValue()) {
@@ -79,27 +79,27 @@ public class FreedesktopPortalSettingsProvider implements DesktopSettings, AutoC
                             // Unknown values should be treated as 0 (no preference).
                             default -> DEFAULT_COLOR_SCHEME;
                         });
-                        foundSettings.add(FreedesktopPortalSettings.COLOR_SCHEME);
+                        foundSettings.add(FreedesktopSettings.COLOR_SCHEME);
                     }
                 }
                 case ACCENT_COLOR -> {
                     if (setting.getValue() instanceof Double[] color) {
                         accentColorWrapper.set(Color.color(color[0], color[1], color[2]));
-                        foundSettings.add(FreedesktopPortalSettings.ACCENT_COLOR);
+                        foundSettings.add(FreedesktopSettings.ACCENT_COLOR);
                     }
                 }
                 case REDUCED_MOTION -> {
                     if (setting.getValue() instanceof UInt32 contrast) {
                         // 1: Reduced motion
                         reducedMotionWrapper.set(contrast.intValue() == 1);
-                        foundSettings.add(FreedesktopPortalSettings.REDUCED_MOTION);
+                        foundSettings.add(FreedesktopSettings.REDUCED_MOTION);
                     }
                 }
                 case CONTRAST -> {
                     if (setting.getValue() instanceof UInt32 contrast) {
                         // 1: Higher contrast
                         highContrastWrapper.set(contrast.intValue() == 1);
-                        foundSettings.add(FreedesktopPortalSettings.CONTRAST);
+                        foundSettings.add(FreedesktopSettings.CONTRAST);
                     }
                 }
             }
@@ -112,18 +112,18 @@ public class FreedesktopPortalSettingsProvider implements DesktopSettings, AutoC
             // Read current values for settings exposed by the interface
             var portalSettings = sessionConnection.getRemoteObject(FREEDESKTOP_PORTAL_DESKTOP_BUS_NAME,
                     FREEDESKTOP_PORTAL_DESKTOP_PATH,
-                    FreedesktopPortalInterface.class);
+                    SettingsPortalInterface.class);
             var appearance = portalSettings.ReadAll(new String[]{FREEDESKTOP_APPEARANCE}).get(FREEDESKTOP_APPEARANCE);
             if (appearance != null) {
                 appearance.forEach(settingsMapper);
             }
 
             // Install signal handler to listen to org.freedesktop.portal.Settings::SettingChanged
-            FreedesktopPortalInterface changedSettingsSignal =
+            SettingsPortalInterface changedSettingsSignal =
                     sessionConnection.getRemoteObject(FREEDESKTOP_PORTAL_DESKTOP_BUS_NAME,
                             FREEDESKTOP_PORTAL_DESKTOP_PATH,
-                            FreedesktopPortalInterface.class);
-            sessionConnection.addSigHandler(FreedesktopPortalInterface.SettingChanged.class, changedSettingsSignal,
+                            SettingsPortalInterface.class);
+            sessionConnection.addSigHandler(SettingsPortalInterface.SettingChanged.class, changedSettingsSignal,
                     signal -> {
                         if (signal.getNamespace().equals(FREEDESKTOP_APPEARANCE)) {
                             settingsMapper.accept(signal.getKey(), signal.getValue());
@@ -148,11 +148,11 @@ public class FreedesktopPortalSettingsProvider implements DesktopSettings, AutoC
         }
 
         // Assign found settings to output properties, or fall back to JavaFX implementation.
-        this.colorSchemeProperty = dBusConnectionSuccess && foundSettings.contains(FreedesktopPortalSettings.COLOR_SCHEME) ?
+        this.colorSchemeProperty = dBusConnectionSuccess && foundSettings.contains(FreedesktopSettings.COLOR_SCHEME) ?
                 colorSchemeWrapper.getReadOnlyProperty() : Platform.getPreferences().colorSchemeProperty();
-        this.accentColorProperty = dBusConnectionSuccess && foundSettings.contains(FreedesktopPortalSettings.ACCENT_COLOR) ?
+        this.accentColorProperty = dBusConnectionSuccess && foundSettings.contains(FreedesktopSettings.ACCENT_COLOR) ?
                 accentColorWrapper.getReadOnlyProperty() : Platform.getPreferences().accentColorProperty();
-        this.reducedMotionProperty = dBusConnectionSuccess && foundSettings.contains(FreedesktopPortalSettings.REDUCED_MOTION) ?
+        this.reducedMotionProperty = dBusConnectionSuccess && foundSettings.contains(FreedesktopSettings.REDUCED_MOTION) ?
                 reducedMotionWrapper.getReadOnlyProperty() : Platform.getPreferences().reducedMotionProperty();
         // There is no JavaFX implementation for a high contrast setting
         this.highContrastProperty = highContrastWrapper.getReadOnlyProperty();

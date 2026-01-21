@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.binjr.portal.settings.freedesktop;
+package eu.binjr.portalfx.settings.freedesktop;
 
 import org.freedesktop.dbus.annotations.DBusBoundProperty;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
@@ -34,7 +34,7 @@ import java.util.Map;
  * https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Settings.html#methods
  */
 @DBusInterfaceName("org.freedesktop.portal.Settings")
-public interface FreedesktopPortalInterface extends DBusInterface, Properties {
+public interface SettingsPortalInterface extends DBusInterface, Properties {
     <T> Variant<T> ReadOne(String namespace, String key);
 
     <T> Map<String, Map<String, Variant<T>>> ReadAll(String[] namespaces);

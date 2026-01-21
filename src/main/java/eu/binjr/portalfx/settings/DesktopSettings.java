@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.binjr.portal.settings;
+package eu.binjr.portalfx.settings;
 
 
 import javafx.application.ColorScheme;
