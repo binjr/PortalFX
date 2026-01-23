@@ -22,7 +22,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.paint.Color;
 
-public interface DesktopSettings {
+public interface SettingsPortal {
     
     /**
      * The platform color scheme, which specifies whether applications should prefer light text on

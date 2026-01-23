@@ -30,22 +30,22 @@ public class SettingsTests {
 
     @Test
     void coloScheme() throws Exception {
-        assertNotNull(runOnFxThread((() -> Portal.getSettings().colorSchemeProperty())));
+        assertNotNull(runOnFxThread((() -> DesktopPortals.settings().colorSchemeProperty())));
     }
 
     @Test
     void accentColor() throws Exception {
-        assertNotNull(runOnFxThread((() -> Portal.getSettings().accentColorProperty())));
+        assertNotNull(runOnFxThread((() -> DesktopPortals.settings().accentColorProperty())));
     }
 
     @Test
     void highContrast() throws Exception {
-        assertNotNull(runOnFxThread((() -> Portal.getSettings().highContrastProperty())));
+        assertNotNull(runOnFxThread((() -> DesktopPortals.settings().highContrastProperty())));
     }
 
     @Test
     void reduceMotion() throws Exception {
-        assertNotNull(runOnFxThread((() -> Portal.getSettings().reducedMotionProperty())));
+        assertNotNull(runOnFxThread((() -> DesktopPortals.settings().reducedMotionProperty())));
     }
 
     <T> T runOnFxThread(Supplier<T> supplier) throws InterruptedException, TimeoutException {
@@ -62,12 +62,4 @@ public class SettingsTests {
         }
     }
 
-    @Test
-    void xattrTest() throws IOException {
-
-        System.out.println(Portal.toHostFsPath(Path.of("/run/user/1000/doc/82ea9a9a/_g1gc.bjr")));
-        System.out.println(Portal.toHostFsPath(Path.of("/home/Fred/Documents/_g1gc.bjr")));
-        System.out.println(Portal.toHostFsPath(Path.of("foobar")));
-
-    }
 }

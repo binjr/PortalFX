@@ -1,8 +1,5 @@
-package eu.binjr.portalfx;
+package eu.binjr.portalfx.documents;
 
-import eu.binjr.portalfx.settings.DesktopSettings;
-import eu.binjr.portalfx.settings.javafx.JavaFxSettingsProvider;
-import eu.binjr.portalfx.settings.freedesktop.FreedesktopSettingsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,25 +9,12 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
-import java.util.Locale;
 
-public class Portal {
-
+public class DocumentsPortal {
     private static final String DOCUMENT_PORTAL_HOST_PATH = "document-portal.host-path";
-    private static final Logger logger = LoggerFactory.getLogger(Portal.class);
+    private static final Logger logger = LoggerFactory.getLogger(DocumentsPortal.class);
 
-    private static class SettingsHolder {
-        private final static DesktopSettings DESKTOP_SETTINGS =
-                System.getProperty("os.name").toLowerCase(Locale.ROOT).startsWith("linux") ?
-                        new FreedesktopSettingsProvider() : new JavaFxSettingsProvider();
-    }
-
-    public static DesktopSettings getSettings() {
-        return SettingsHolder.DESKTOP_SETTINGS;
-    }
-
-
-    public static Path toHostFsPath(Path sandboxPath) {
+    public  Path toHostFsPath(Path sandboxPath) {
         if (Files.exists(sandboxPath)) {
             var userDefView = Files.getFileAttributeView(sandboxPath, UserDefinedFileAttributeView.class);
             try {
@@ -47,4 +31,3 @@ public class Portal {
         return sandboxPath;
     }
 }
-
