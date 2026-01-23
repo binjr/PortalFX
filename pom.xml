@@ -7,7 +7,7 @@
     <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>portalfx</name>
+    <name>PortalFX</name>
     <description>An XDG Desktop Portal helper for JavaFX applications</description>
     <url>http://github.com/binjr/portalfx</url>
 

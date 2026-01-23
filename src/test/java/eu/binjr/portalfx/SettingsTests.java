@@ -5,8 +5,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -30,22 +28,22 @@ public class SettingsTests {
 
     @Test
     void coloScheme() throws Exception {
-        assertNotNull(runOnFxThread((() -> DesktopPortals.settings().colorSchemeProperty())));
+        assertNotNull(runOnFxThread((() -> Portal.settings().colorSchemeProperty())));
     }
 
     @Test
     void accentColor() throws Exception {
-        assertNotNull(runOnFxThread((() -> DesktopPortals.settings().accentColorProperty())));
+        assertNotNull(runOnFxThread((() -> Portal.settings().accentColorProperty())));
     }
 
     @Test
     void highContrast() throws Exception {
-        assertNotNull(runOnFxThread((() -> DesktopPortals.settings().highContrastProperty())));
+        assertNotNull(runOnFxThread((() -> Portal.settings().highContrastProperty())));
     }
 
     @Test
     void reduceMotion() throws Exception {
-        assertNotNull(runOnFxThread((() -> DesktopPortals.settings().reducedMotionProperty())));
+        assertNotNull(runOnFxThread((() -> Portal.settings().reducedMotionProperty())));
     }
 
     <T> T runOnFxThread(Supplier<T> supplier) throws InterruptedException, TimeoutException {
