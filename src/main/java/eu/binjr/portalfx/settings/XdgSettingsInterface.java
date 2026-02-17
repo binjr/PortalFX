@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package eu.binjr.portal.settings.freedesktop;
+package eu.binjr.portalfx.settings;
 
+import eu.binjr.portalfx.xdg.XdgPortalInterface;
 import org.freedesktop.dbus.annotations.DBusBoundProperty;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.annotations.DBusProperty;
 import org.freedesktop.dbus.exceptions.DBusException;
-import org.freedesktop.dbus.interfaces.DBusInterface;
-import org.freedesktop.dbus.interfaces.Properties;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.UInt32;
 import org.freedesktop.dbus.types.Variant;
@@ -34,13 +33,10 @@ import java.util.Map;
  * https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Settings.html#methods
  */
 @DBusInterfaceName("org.freedesktop.portal.Settings")
-public interface FreedesktopPortalInterface extends DBusInterface, Properties {
+public interface XdgSettingsInterface extends XdgPortalInterface {
     <T> Variant<T> ReadOne(String namespace, String key);
 
     <T> Map<String, Map<String, Variant<T>>> ReadAll(String[] namespaces);
-
-    @DBusBoundProperty(access = DBusProperty.Access.READ, name = "Version")
-    UInt32 getVersion();
 
     class SettingChanged<T> extends DBusSignal {
         private final String namespace;
@@ -66,4 +62,7 @@ public interface FreedesktopPortalInterface extends DBusInterface, Properties {
             return value;
         }
     }
+
+    @DBusBoundProperty(access = DBusProperty.Access.READ, name = "version")
+    UInt32 getVersion();
 }

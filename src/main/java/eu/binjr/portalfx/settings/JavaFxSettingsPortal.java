@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package eu.binjr.portal.settings.javafx;
+package eu.binjr.portalfx.settings;
 
-import eu.binjr.portal.settings.DesktopSettings;
 import javafx.application.ColorScheme;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -27,7 +26,7 @@ import javafx.scene.paint.Color;
 /**
  * A DesktopPortal implementation that acts as a passthrough to the default JavaFX implementation
  */
-public class JavaFxSettingsProvider implements DesktopSettings {
+public class JavaFxSettingsPortal implements SettingsPortal {
     private final ReadOnlyObjectProperty<ColorScheme> colorSchemeProperty = Platform.getPreferences().colorSchemeProperty();
     private final ReadOnlyObjectProperty<Color> accentColorProperty = Platform.getPreferences().accentColorProperty();
     private final ReadOnlyBooleanProperty reducedMotionProperty = Platform.getPreferences().reducedMotionProperty();
