@@ -69,15 +69,16 @@ public abstract class XdgPortal<T extends XdgPortalInterface> {
                             portal.getVersion() + " < minimum=" + MIN_VERSION + ")");
                 }
             } catch (DBusExecutionException dBex) {
-                logger.error("Failed to establish connection to bus name " + DESKTOP_PORTAL_BUS_NAME +
-                        ", interface " + portalClass.getName());
+                logger.warn("Failed to establish connection to bus name " + DESKTOP_PORTAL_BUS_NAME +
+                        ", interface " + portalClass.getName() + ": " + dBex.getMessage());
                 logger.debug("Stack trace", dBex);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                      NoSuchMethodException e) {
-                logger.error("Failed to create new instance of " + portalClass.getName());
+                logger.error("Failed to create new instance of " + portalClass.getName() + ": " + e.getMessage());
                 logger.debug("Stack trace", e);
             }
-
+        } else {
+            logger.debug("Freedesktop portal not available on " + System.getProperty("os.name"));
         }
         return Optional.empty();
     }
